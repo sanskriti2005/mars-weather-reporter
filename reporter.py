@@ -33,8 +33,31 @@ def building_url():
 def get_data_from_url(url):
     #create a request object for the built url and add a user-agent
     req = request.Request(url, headers={'User-Agent':'Mozilla/5.0'})
-    
 
+    try:
+        #initializing http request from the request object
+        response = request.urlopen(req)
+    #incase of an error
+    except error.HTTPError as http_error:
+        # 401 Unauthorized
+        if http_error.code == 401:
+            sys.exit("Access Denied, Check you API key.")
+        # 404 Not-found
+        elif http_error.code == 404:
+            sys.exit("Can't find the data/ the data is not available due to problems in, out aplogies.")
+        else:
+            sys.exit(f"Something went wrong... ({http_error.code})")
+
+
+    #data from the response is read
+    data = response.read()
+
+    #returns deserialized json data
+    try:
+        return.json.loads(data) 
+    except:
+        sys.exit("Couldn't read the server response.")
+    
 
 def display_information(arg1, arg2=False, arg3=False):
     print(f"Temp:{}")
