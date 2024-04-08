@@ -94,11 +94,33 @@ def get_data_from_url(url):
         sys.exit("Couldn't read the server response.")
     
 
-def display_information(arg1, arg2=False, arg3=False):
-    print(f"Temp:{kjhgjk}")
+def display_information(data, sol, atmospheric_temperature=True, horizontal_wind_speed=False, atmospheric_pressure=False, wind_direction=False):
+    # Check if the sol is in the data
+    if str(sol) in data:
+        sol_data = data[str(sol)]
+        
+        # Display atmospheric temperature
+        if atmospheric_temperature and 'AT' in sol_data:
+            print(f"Sol {sol} average temperature: {sol_data['AT']['av']} degrees Celsius")
+        
+        # Display horizontal wind speed
+        if horizontal_wind_speed and 'HWS' in sol_data:
+            print(f"Sol {sol} average horizontal wind speed: {sol_data['HWS']['av']} m/s")
+        
+        # Display atmospheric pressure
+        if atmospheric_pressure and 'PRE' in sol_data:
+            print(f"Sol {sol} average atmospheric pressure: {sol_data['PRE']['av']} Pa")
+        
+        # Display wind direction
+        if wind_direction and 'WD' in sol_data:
+            most_common_direction = max(sol_data['WD'], key=lambda x: x['compass_degrees'])
+            print(f"Sol {sol} most common wind direction: {most_common_direction['compass_point']} ({most_common_direction['compass_degrees']} degrees)")
+    else:
+        print(f"No data available for Sol {sol}")
 
-    if arg2:
-        print(f"")
-    if arg3:
-        print(f"")
     
+
+if __name__ == "__main__":
+    user_args = read_user_arguments()
+    query_url = building_url()
+    data_from_url = get_data_from_url(query_url)
