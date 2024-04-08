@@ -11,23 +11,58 @@ def get_api_key():
 
 # PARSING USER ARGUMENTS 
 def read_user_arguments():
+    
     #Argument Parser
     parser = argparse.ArgumentParser(
         description="Reports Mars' current atmospheric temperature"
     )
 
-    parser.add_argument(        #add arguments here
+    #Sol 
+    parser.add_argument(
+        "sol", nargs="?", type=int, help="Mars' Sol Number" 
+    )
 
+    #atmospheric temperature 
+    parser.add_argument(
+        "atmospheric_temperature", 
+        nargs="?", 
+        help="Atmospheric temperature of the day."
+    )
+
+    #horizontal wind speed
+    parser.add_argument(
+        "-hws",
+        "--horizontal_wind_speed",
+        action="store_true",
+        help="display the horizontal wind speed."
+    )
+
+    #atmospheric pressure
+    parser.add_argument(
+        "-pre",
+        "--atmospheric_pressure", 
+        action="store_true",
+        help="display the atmospheric pressure."
+    )
+
+    #wind direction
+    parser.add_argument(
+        "-wd",
+        "--wind_direction",
+        action="store_true",
+        help="display the horizontal wind speed."
     )
 
 
     return parser.parse_args
 
 def building_url():
+    #Call API key
     api_key = get_api_key()
-    url = (
-        f"<url>{api_key}<url>"
-    )
+
+    #Buiding the url
+    url = (f"//api.nasa.gov/insight_weather/?api_key={api_key}&feedtype=json&ver=1.0")
+
     return url
 
 def get_data_from_url(url):
@@ -54,13 +89,13 @@ def get_data_from_url(url):
 
     #returns deserialized json data
     try:
-        return.json.loads(data) 
+        return json.loads(data) 
     except:
         sys.exit("Couldn't read the server response.")
     
 
 def display_information(arg1, arg2=False, arg3=False):
-    print(f"Temp:{}")
+    print(f"Temp:{kjhgjk}")
 
     if arg2:
         print(f"")
